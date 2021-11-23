@@ -40,13 +40,17 @@ class GameOverSubstate extends MusicBeatSubstate
 		super();
 
 		Conductor.songPosition = 0;
-
+		if(state.isPixelStage)
+		{
+			characterName = 'bf-pixel-dead';
+			stageSuffix = 'pixel';
+		}
 		bf = new Boyfriend(x, y, characterName);
 		add(bf);
 
 		camFollow = new FlxPoint(bf.getGraphicMidpoint().x, bf.getGraphicMidpoint().y);
 
-		FlxG.sound.play(Paths.sound(deathSoundName));
+		FlxG.sound.play(Paths.sound(deathSoundName+stageSuffix);
 		Conductor.changeBPM(100);
 		// FlxG.camera.followLerp = 1;
 		// FlxG.camera.focusOn(FlxPoint.get(FlxG.width / 2, FlxG.height / 2));
@@ -125,17 +129,26 @@ class GameOverSubstate extends MusicBeatSubstate
 
 	function coolStartDeath(?volume:Float = 1):Void
 	{
-		FlxG.sound.playMusic(Paths.music(loopSoundName), volume);
+		if(PlayState.isPixelStage)
+		{
+			stageSuffix = "-pixel";
+		}
+		
+		FlxG.sound.playMusic(Paths.music(loopSoundName+stageSuffix), volume);
 	}
 
 	function endBullshit():Void
 	{
+		if(PlayState.isPixelStage)
+		{
+			stageSuffix = '-pixel';
+		}
 		if (!isEnding)
 		{
 			isEnding = true;
 			bf.playAnim('deathConfirm', true);
 			FlxG.sound.music.stop();
-			FlxG.sound.play(Paths.music(endSoundName));
+			FlxG.sound.play(Paths.music(endSoundName+stageSuffix));
 			new FlxTimer().start(0.7, function(tmr:FlxTimer)
 			{
 				FlxG.camera.fade(FlxColor.BLACK, 2, false, function()
